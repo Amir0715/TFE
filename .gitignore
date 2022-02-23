@@ -1,0 +1,37 @@
+# General
+env/
+__pycache__/
+
+# Django
+*.sqlite3
+backend/*/migrations/??*_??*.py
+
+# Visual studio
+.vscode/* 
+!.vscode/settings.json 
+!.vscode/tasks.json 
+!.vscode/launch.json 
+!.vscode/extensions.json 
+
+# FRONTEND
+node_modules/
+/.pnp
+.pnp.js
+
+# testing
+coverage/
+
+# production
+build/
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
