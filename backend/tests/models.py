@@ -3,7 +3,12 @@ from django.db.models.fields.related import ForeignKey, ManyToManyField
 from django.db import timezone
 
 
-class VariantOfAnswer(models.BaseModel):
+class BaseModel(models.Model):
+    created_at = models.Datetime(auto_now_add=True)
+    updated_at = models.Datetime(auto_now=True)
+
+
+class VariantOfAnswer(BaseModel):
     value_of_answer = models.TextField(
         blank=True, verbose_name='Вариант ответа')
 
@@ -16,7 +21,7 @@ class VariantOfAnswer(models.BaseModel):
         verbose_name_plural = 'Варианты ответа'
 
 
-class Question(models.BaseModel):
+class Question(BaseModel):
     body_question = models.TextField(blank=True, verbose_name='Тело вопроса')
     category = models.ForeignKey(
         'Category', on_delete=models.CASCADE, verbose_name='Категория')
@@ -32,7 +37,7 @@ class Question(models.BaseModel):
         verbose_name_plural = 'Вопросы'
 
 
-class Category(models.Basemodel):
+class Category(BaseModel):
     title = models.TextField(blank=True, verbose_name='Категория')
 
     def __str__(self):
@@ -43,7 +48,7 @@ class Category(models.Basemodel):
         verbose_name_plural = 'Категории'
 
 
-class AnswersFromHuman(models.Basemodel):
+class AnswersFromHuman(BaseModel):
     question = models.ForeignKey(
         'Question', on_delete=models.CASCADE, verbose_name='Вопрос')
     # Вот тут чето не понятно.!!!
@@ -51,7 +56,6 @@ class AnswersFromHuman(models.Basemodel):
         'VariantOfAnswer', on_delete=models.CASCADE, verbose_name='Вариант ответа от пользователя')
     # Вот тут чето не понятно.!!!
 
-    
 
-class Test(models.Basemodel):
+class Test(BaseModel):
     pass
