@@ -25,12 +25,7 @@ class VariantOfAnswer(BaseModel):
 class Question(BaseModel):
     # M2M какой verbose_name?
     body_question = models.TextField(verbose_name="Тело вопроса")
-    category = models.ForeignKey(
-        verbose_name="Категория",
-        to="Category",
-        on_delete=models.RESTRICT,
-        related_name="categories",
-    )
+
     variant_answers = models.ManyToManyField(
         verbose_name="Варианты", to="VariantOfAnswer", through="QuestionVariantOfAnswer"
     )
@@ -62,7 +57,16 @@ class QuestionVariantOfAnswer(BaseModel):
 
 
 class Category(BaseModel):
-    title = models.TextField(verbose_name="Категория")
+    title = models.CharField(verbose_name="Название категории", max_length=40)
+    description = models.TextField(verbose_name="Описание категории")
+    parent = models.ForeignKey(
+        verbose_name="Родитель",
+        to="self",
+        null=True,
+        on_delete=models.RESTRICT,
+        blank=True,
+        related_name="children",
+    )
 
     def __str__(self):
         return self.title
@@ -121,15 +125,21 @@ class ComplitedUserTest(BaseModel):
 
 class Test(BaseModel):
     title = models.CharField(verbose_name="Название теста", max_length=100)
-    description = models.CharField(verbose_name="Описание теста", max_length=300)
+    description = models.TextField(verbose_name="Описание теста")
     time_for_test = models.DurationField(
-        verbose_name="Ограничение по времени", null=True
+        verbose_name="Ограничение по времени", blank=True, null=True
     )
     question = models.ManyToManyField(
         verbose_name="Вопрос",
         to="Question",
         through="TestQuestion",
         related_name="tests",
+    )
+    category = models.ForeignKey(
+        verbose_name="Категория",
+        to="Category",
+        on_delete=models.RESTRICT,
+        related_name="categories",
     )
 
     def __str__(self):
