@@ -5,7 +5,7 @@ import {
 } from "react-router-dom";
 import CssBaseline from '@mui/material/CssBaseline';
 import MainPage from "./pages/MainPage";
-// import TestPage from "./pages/TestPage";
+import TestPage from "./pages/TestPage";
 
 const App = () => {
   return (
@@ -14,6 +14,7 @@ const App = () => {
         <CssBaseline />
         <Routes>
           <Route path="*" element={<MainPage />} />
+          <Route path='/tests/:id' element={<TestPage />} />
           {/* <Route path="/login" element={<LoginPage />} /> */}
         </Routes>
       </BrowserRouter>

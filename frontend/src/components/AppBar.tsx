@@ -1,5 +1,7 @@
 import { AppBar, IconButton, Toolbar, Typography } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+import SearchInput from "./SearchInput";
+import ProfileName from "./ProfileName";
 
 interface AppBarProps {
     drawerWidth: number,
@@ -14,11 +16,16 @@ const MyAppBar = ({ drawerWidth, handleDrawerToggle, title }: AppBarProps) => {
             sx={{
                 width: { sm: `calc(100% - ${drawerWidth}px)` },
                 ml: { sm: `${drawerWidth}px` },
-                backgroundColor: 'white',
+                boxShadow: 'none',
+                backgroundColor: 'inherit',
             }}
         >
-            <Toolbar>
-                <IconButton
+            <Toolbar
+                sx={{
+                    justifyContent: "space-between",
+                }}
+            >
+                {/* <IconButton
                     aria-label="open drawer"
                     edge="start"
                     onClick={handleDrawerToggle}
@@ -28,7 +35,9 @@ const MyAppBar = ({ drawerWidth, handleDrawerToggle, title }: AppBarProps) => {
                 </IconButton>
                 <Typography variant="h6" noWrap component="div" sx={{ color: "black" }}>
                     {title}
-                </Typography>
+                </Typography> */}
+                <SearchInput />
+                <ProfileName />
             </Toolbar>
         </AppBar>
     );

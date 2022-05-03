@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import { Box, Toolbar } from "@mui/material";
-import Test from "../components/Test";
 import AllTestPage from "../pages/AllTestsPage";
 import CategoriesPage from "../pages/CategoriesPage";
 import { NavBar } from "../components/NavBar";
@@ -25,16 +24,15 @@ const MainPage = ({ window }: MainPageProps) => {
     const container = window !== undefined ? () => window().document.body : undefined;
 
     return (
-        <Box sx={{ display: 'flex' }}>
+        <Box sx={{ display: 'flex', backgroundColor: "#F6F8FB" }}>
             <AppBar drawerWidth={drawerWidth} handleDrawerToggle={handleDrawerToggle} title="Главная страница" />
             <NavBar drawerWidth={drawerWidth} />
-            <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+            <Box component="main" sx={{ flexGrow: 1, p: 3, height: "100vh" }}>
                 <Toolbar />
                 <Routes>
                     <Route path='/' element={<HomePage />} />
                     <Route path='/tests/all' element={<AllTestPage />} />
                     <Route path='/tests/categories' element={<CategoriesPage />} />
-                    <Route path='/tests/:id' element={<Test />} />
                 </Routes>
             </Box>
         </Box>

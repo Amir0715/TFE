@@ -7,9 +7,6 @@ import { routesStructure } from "../routes";
 const ListItems = () => {
     return (
         <div>
-            <Toolbar>
-                Тестовая система
-            </Toolbar>
             {routesStructure.map(({ title, to }, index) => (
                 <Box
                     key={index}

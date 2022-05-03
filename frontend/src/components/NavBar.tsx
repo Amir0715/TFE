@@ -1,4 +1,4 @@
-import { Box, Drawer } from "@mui/material";
+import { Box, Drawer, Toolbar } from "@mui/material";
 import { NavBarListItem } from "./NavBarListItem";
 
 interface NavBarProps {
@@ -12,7 +12,7 @@ const MyNavBar = ({ drawerWidth, container, mobileOpen, handleDrawerToggle }: Na
     return (
         <Box
             component="nav"
-            sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+            sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 }, boxShadow: "4px 0px 16px rgba(16, 30, 115, 0.08)", zIndex: 1299}}
             aria-label="mailbox folders"
         >
             {/* <Drawer
@@ -34,10 +34,13 @@ const MyNavBar = ({ drawerWidth, container, mobileOpen, handleDrawerToggle }: Na
                 variant="permanent"
                 sx={{
                     display: { xs: 'none', sm: 'block' },
-                    '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+                    '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth, borderRight: "none" },
                 }}
                 open
-            >
+                >
+                <Toolbar>
+                    Тестовая система
+                </Toolbar>
                 <NavBarListItem />
             </Drawer>
         </Box>
