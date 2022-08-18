@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.conf import settings
 
 class BaseModel(models.Model):
     created_at = models.DateTimeField(verbose_name="Время создания", auto_now_add=True)
@@ -8,53 +8,33 @@ class BaseModel(models.Model):
     class Meta:
         abstract = True
 
-
-class VariantOfAnswer(BaseModel):
-    # Убрать blank
-    value_of_answer = models.TextField(verbose_name="Вариант ответа")
+class Test(BaseModel):
+    title = models.CharField(verbose_name="Название теста", max_length=100)
+    description = models.TextField(verbose_name="Описание теста")
+    category = models.ForeignKey(
+        verbose_name="Категория",
+        to="Category",
+        on_delete=models.RESTRICT,
+        related_name="tests",
+    )
+    author = models.ForeignKey(
+        verbose_name="Автор",
+        to=settings.AUTH_USER_MODEL,
+        on_delete=models.RESTRICT
+        )
 
     def __str__(self):
-        return self.value_of_answer
+        return self.title
+
+    def question_count(self) -> int:
+        return self.questions.count()
+
+    def category_title(self) -> str:
+        return self.category.title
 
     class Meta:
-        # for admin panel
-        verbose_name = "Вариант ответа"
-        verbose_name_plural = "Варианты ответа"
-
-
-class Question(BaseModel):
-    # M2M какой verbose_name?
-    body_question = models.TextField(verbose_name="Тело вопроса")
-
-    variant_answers = models.ManyToManyField(
-        verbose_name="Варианты", to="VariantOfAnswer", through="QuestionVariantOfAnswer"
-    )
-
-    def __str__(self):
-        return self.body_question
-
-    class Meta:
-        # for admin panel
-        verbose_name = "Вопрос"
-        verbose_name_plural = "Вопросы"
-
-
-class QuestionVariantOfAnswer(BaseModel):
-    # По сути сами создаём третью и явно указываем её в question.
-    question = models.ForeignKey(
-        verbose_name="Вопрос",
-        to="Question",
-        on_delete=models.RESTRICT,
-        related_name="questions",
-    )
-    variant_of_answer = models.ForeignKey(
-        verbose_name="Вариант ответа",
-        to="VariantOfAnswer",
-        on_delete=models.RESTRICT,
-        related_name="variants_of_questions",
-    )
-    is_correct = models.BooleanField(default=False)
-
+        verbose_name = "Тест"
+        verbose_name_plural = "Тесты"
 
 class Category(BaseModel):
     title = models.CharField(verbose_name="Название категории", max_length=40)
@@ -74,89 +54,100 @@ class Category(BaseModel):
     class Meta:
         verbose_name = "Категория"
         verbose_name_plural = "Категории"
+        unique_together = ("id", "parent_id")
 
 
-class AnswersFromHuman(BaseModel):
+class QuestionType(models.IntegerChoices):
+    Close = 1
+    CloseWithFew = 2
+    Open = 3
 
-    # question - id вопроса на который ответил пользователь
-    question = models.ForeignKey(
-        verbose_name="Вопрос на который отвечают",
-        to="Question",
-        on_delete=models.RESTRICT,
-        related_name="active_question",
-    )
-    # answers_from_user Many to Many - так как может быть много ответов на один вопрос.
-    answers_from_user = models.ManyToManyField(
-        verbose_name="Вариант ответа пользователя",
-        to="VariantOfAnswer",
-    )
-    complited_test = models.ForeignKey(
-        verbose_name="Принадлежит тесту",
-        to="ComplitedUserTest",
-        on_delete=models.RESTRICT,
-        related_name="answers",
-    )
-
-    class Meta:
-        verbose_name = "Ответ пользователя"
-        verbose_name_plural = "Ответы пользователя"
-
-
-class ComplitedUserTest(BaseModel):
+class Question(BaseModel):
+    title = models.CharField(verbose_name="Загаловок вопроса", max_length=255)
+    body = models.TextField(verbose_name="Описание вопроса")
     test = models.ForeignKey(
-        verbose_name="Пройденный тест",
+        verbose_name="Тест",
         to="Test",
-        on_delete=models.RESTRICT,
-        related_name="complited_tests",
-    )
-    started_at = models.DateTimeField(
-        verbose_name="Время начало теста",
-        auto_now_add=True,
-    )
-    end_at = models.DateTimeField(verbose_name="Время окончания теста")
-    score_from_test = models.PositiveIntegerField(
-        verbose_name="Количество баллов за тест"
-    )
-
-    class Meta:
-        verbose_name = "Пройденный тест пользователя"
-        verbose_name_plural = "Пройденные тесты пользователей"
-
-
-class Test(BaseModel):
-    title = models.CharField(verbose_name="Название теста", max_length=100)
-    description = models.TextField(verbose_name="Описание теста")
-    time_for_test = models.DurationField(
-        verbose_name="Ограничение по времени", blank=True, null=True
-    )
-    question = models.ManyToManyField(
-        verbose_name="Вопрос",
-        to="Question",
-        through="TestQuestion",
-        related_name="tests",
-    )
-    category = models.ForeignKey(
-        verbose_name="Категория",
-        to="Category",
-        on_delete=models.RESTRICT,
-        related_name="categories",
-    )
+        on_delete=models.CASCADE,
+        related_name="questions"
+        )
+    type = models.IntegerField(choices=QuestionType.choices)
 
     def __str__(self):
         return self.title
 
+    def variant_count(self) -> int:
+        return self.variant_answers.count()
+
     class Meta:
-        verbose_name = "Тест"
-        verbose_name_plural = "Тесты"
+        # for admin panel
+        verbose_name = "Вопрос"
+        verbose_name_plural = "Вопросы"
 
 
-class TestQuestion(BaseModel):
-    test = models.ForeignKey(verbose_name="Тест", to="Test", on_delete=models.CASCADE)
+class VariantForQuestion(BaseModel):
     question = models.ForeignKey(
-        verbose_name="Вопрос", to="Question", on_delete=models.CASCADE
+        verbose_name="Вопрос",
+        to="Question",
+        on_delete=models.CASCADE,
+        related_name="variant_answers"
+        )
+    value = models.TextField(verbose_name="Вариант ответа")
+    is_correct = models.BooleanField(verbose_name="Правильный ответ", default=False)
+
+    def __str__(self):
+        return self.value
+
+    class Meta:
+        verbose_name = "Вариант ответа"
+        verbose_name_plural = "Варианты ответа"
+        unique_together = ("id", "question_id")
+
+class PassedTest(BaseModel):
+    user = models.ForeignKey(
+        verbose_name="Прошедший",
+        to=settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="passed_tests"
+    )
+    test = models.ForeignKey(
+        verbose_name="Тест",
+        to="Test",
+        on_delete=models.CASCADE,
+        related_name="passed"
     )
 
     class Meta:
-        verbose_name = "Ответ на тест"
-        verbose_name_plural = "Ответы на тесты"
-        unique_together = ("test", "question")
+        verbose_name = "Пройденный тест"
+        verbose_name_plural = "Пройденные тесты"
+
+
+class AnswerToQuestion(BaseModel):
+    question = models.ForeignKey(
+        verbose_name="Вопрос",
+        to="Question",
+        on_delete=models.CASCADE,
+        related_name="answers"
+    )
+    selected_variant = models.ForeignKey(
+        verbose_name="Выбранный ответ",
+        to="VariantForQuestion",
+        on_delete=models.CASCADE,
+        related_name="in_answers",
+        null=True,
+        blank=True
+    )
+    passed_test = models.ForeignKey(
+        verbose_name="Пренадлежит прохождению",
+        to="PassedTest",
+        on_delete=models.CASCADE,
+        related_name="answers"
+    )
+    open_answer = models.TextField(
+        verbose_name="Открытый ответ",
+        blank=True
+    )
+
+    class Meta:
+        verbose_name = "Ответ пользователя"
+        verbose_name_plural = "Ответы пользователей"

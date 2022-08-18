@@ -1,8 +1,16 @@
 from rest_framework import serializers
-from tests.models import Test
+from tests.models import Test, Category
+
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ["id", "title"]
 
 
 class TestSerializer(serializers.ModelSerializer):
+    category = CategorySerializer()
+
     class Meta:
         model = Test
-        fields = "__all__"
+        fields = ["id", "title", "description", "category", "question_count"]
