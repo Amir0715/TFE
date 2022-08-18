@@ -91,6 +91,45 @@ class Question(BaseModel):
         verbose_name_plural = "Вопросы"
 
 
+class QuestionSetting(BaseModel):
+    name = models.CharField(verbose_name="Название настройки", max_length=255)
+    # related_name не указан, так что используй conflicts_set
+    conflicts = models.ManyToManyField(
+        verbose_name="Конфликтующие настройки",
+        to="self",
+        null=True,
+        blank=True
+    )
+
+    def __str__(self) -> str:
+        return self.name
+
+    class Meta:
+        verbose_name = "Настройка вопроса"
+        verbose_name_plural = "Настройки для вопросов"
+
+
+class QuestionPointSetting(BaseModel):
+    point = models.PositiveIntegerField(verbose_name="Кол-во баллов за этот вопрос")
+    question = models.OneToOneField(
+        verbose_name="Вопрос",
+        to="Question",
+        on_delete=models.CASCADE,
+        related_name="point_settings",
+        unique=True
+    )
+    setting = models.ForeignKey(
+        verbose_name="Настройка",
+        to="QuestionSetting",
+        on_delete=models.CASCADE,
+        related_name="point_values"
+    )
+
+    class Meta:
+        verbose_name = "Значение настройки Кол-во баллов"
+        verbose_name_plural = "Значения настройки Кол-во баллов"
+
+
 class VariantForQuestion(BaseModel):
     question = models.ForeignKey(
         verbose_name="Вопрос",
