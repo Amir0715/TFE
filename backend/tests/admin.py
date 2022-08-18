@@ -1,5 +1,5 @@
 from django.contrib import admin
-from tests.models import Category, Test, Question, VariantForQuestion, PassedTest, AnswerToQuestion
+from tests.models import Category, Test, Question, TestTimerSetting, VariantForQuestion, PassedTest, AnswerToQuestion, TestSetting
 
 
 @admin.register(Test)
@@ -10,6 +10,36 @@ class TestAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
             "fields": ("title", "description", "category", "author")
+        }),
+        ("Служебная", {
+            "fields": ("created_at", "updated_at")
+        })
+    )
+
+
+@admin.register(TestSetting)
+class TestSettingAdmin(admin.ModelAdmin):
+    list_display = ["id", "name"]
+    readonly_fields = ("created_at", "updated_at")
+
+    fieldsets = (
+        (None, {
+            "fields": ("name", "conflicts")
+        }),
+        ("Служебная", {
+            "fields": ("created_at", "updated_at")
+        })
+    )
+
+
+@admin.register(TestTimerSetting)
+class TestTimerSettingAdmin(admin.ModelAdmin):
+    list_display = ["id", "test", "timer_value"]
+    readonly_fields = ("created_at", "updated_at")
+
+    fieldsets = (
+        (None, {
+            "fields": ("test", "setting", "timer_value")
         }),
         ("Служебная", {
             "fields": ("created_at", "updated_at")
@@ -57,6 +87,7 @@ class VariantForQuestionAdmin(admin.ModelAdmin):
             "fields": ("created_at", "updated_at")
         })
     )
+
 
 @admin.register(PassedTest)
 class PassedTestAdmin(admin.ModelAdmin):
