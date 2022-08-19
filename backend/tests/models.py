@@ -116,7 +116,7 @@ class QuestionPointSetting(BaseModel):
         verbose_name="Вопрос",
         to="Question",
         on_delete=models.CASCADE,
-        related_name="point_settings",
+        related_name="point",
         unique=True
     )
     setting = models.ForeignKey(
