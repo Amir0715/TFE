@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     "tests",
     "rest_framework",
     'drf_spectacular',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [

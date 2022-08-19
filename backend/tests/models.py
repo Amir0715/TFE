@@ -266,7 +266,7 @@ class TestTimerSetting(BaseModel):
         verbose_name="Тест",
         to="Test",
         on_delete=models.CASCADE,
-        related_name="timer_settings",
+        related_name="timer",
         unique=True
     )
     setting = models.ForeignKey(
@@ -287,7 +287,7 @@ class TestAvailabilityTimeRangeSetting(BaseModel):
         verbose_name="Тест",
         to="Test",
         on_delete=models.CASCADE,
-        related_name="availability_time_range_settings",
+        related_name="availability_time_range",
         unique=True
     )
     setting = models.ForeignKey(

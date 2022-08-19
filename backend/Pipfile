@@ -9,6 +9,7 @@ django = "*"
 python-dotenv = "*"
 djangorestframework = "*"
 drf-spectacular = "*"
+django-extensions = "*"
 
 [dev-packages]
 autopep8 = "*"
@@ -18,7 +19,6 @@ pylint-django = "*"
 
 [requires]
 python_version = "3.10"
-
 
 [scripts]
 runserver = "python manage.py runserver"
