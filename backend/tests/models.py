@@ -1,3 +1,4 @@
+from tabnanny import verbose
 from django.db import models
 from django.conf import settings
 
@@ -97,7 +98,6 @@ class QuestionSetting(BaseModel):
     conflicts = models.ManyToManyField(
         verbose_name="Конфликтующие настройки",
         to="self",
-        null=True,
         blank=True
     )
 
@@ -110,7 +110,8 @@ class QuestionSetting(BaseModel):
 
 
 class QuestionPointSetting(BaseModel):
-    point = models.PositiveIntegerField(verbose_name="Кол-во баллов за этот вопрос")
+    point = models.PositiveIntegerField(
+        verbose_name="Кол-во баллов за этот вопрос")
     question = models.OneToOneField(
         verbose_name="Вопрос",
         to="Question",
@@ -164,6 +165,9 @@ class PassedTest(BaseModel):
         related_name="passed"
     )
 
+    def __str__(self):
+        return f"[{self.user} - {self.test.title}]"
+
     class Meta:
         verbose_name = "Пройденный тест"
         verbose_name_plural = "Пройденные тесты"
@@ -176,7 +180,26 @@ class AnswerToQuestion(BaseModel):
         on_delete=models.CASCADE,
         related_name="answers"
     )
-    selected_variant = models.ForeignKey(
+    passed_test = models.ForeignKey(
+        verbose_name="Пренадлежит прохождению",
+        to="PassedTest",
+        on_delete=models.CASCADE,
+        related_name="answers"
+    )
+
+    class Meta:
+        verbose_name = "Ответ пользователя"
+        verbose_name_plural = "Ответы пользователей"
+
+
+class SelectedVariantAnswerToQuestion(BaseModel):
+    answer_question = models.ForeignKey(
+        verbose_name="Ответ пользователя",
+        to="AnswerToQuestion",
+        on_delete=models.CASCADE,
+        related_name="selected_variants"
+    )
+    value = models.ForeignKey(
         verbose_name="Выбранный ответ",
         to="VariantForQuestion",
         on_delete=models.CASCADE,
@@ -184,20 +207,41 @@ class AnswerToQuestion(BaseModel):
         null=True,
         blank=True
     )
-    passed_test = models.ForeignKey(
-        verbose_name="Пренадлежит прохождению",
-        to="PassedTest",
+
+    class Meta:
+        verbose_name = "Ответ пользователя на закрытый вопрос"
+        verbose_name_plural = "Ответы пользователей на закрытые вопросы"
+
+
+class OpenAsnwerToQuestion(BaseModel):
+    answer_question = models.ForeignKey(
+        verbose_name="Ответ пользователя",
+        to="AnswerToQuestion",
         on_delete=models.CASCADE,
-        related_name="answers"
+        related_name="open_answer"
     )
-    open_answer = models.TextField(
-        verbose_name="Открытый ответ",
+    value = models.TextField(
+        verbose_name="Введенный ответ",
         blank=True
     )
 
     class Meta:
-        verbose_name = "Ответ пользователя"
-        verbose_name_plural = "Ответы пользователей"
+        verbose_name = "Ответ пользователя на открытый вопрос"
+        verbose_name_plural = "Ответы пользователей на открытые вопросы"
+
+
+class PointAnswerToQuestion(BaseModel):
+    answer_question = models.OneToOneField(
+        verbose_name="Ответ пользователя",
+        to="AnswerToQuestion",
+        on_delete=models.CASCADE,
+        related_name="point"
+    )
+    point = models.FloatField("Набранное кол-во баллов")
+
+    class Meta:
+        verbose_name = "Балл за ответ пользователя"
+        verbose_name_plural = "Баллы за ответы пользователей"
 
 
 class TestSetting(BaseModel):
@@ -206,7 +250,6 @@ class TestSetting(BaseModel):
     conflicts = models.ManyToManyField(
         verbose_name="Конфликтующие настройки",
         to="self",
-        null=True,
         blank=True
     )
 

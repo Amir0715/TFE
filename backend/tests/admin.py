@@ -1,5 +1,5 @@
 from django.contrib import admin
-from tests.models import Category, QuestionPointSetting, QuestionSetting, Test, Question, TestTimerSetting, VariantForQuestion, PassedTest, AnswerToQuestion, TestSetting
+from tests.models import Category, OpenAsnwerToQuestion, PointAnswerToQuestion, QuestionPointSetting, QuestionSetting, SelectedVariantAnswerToQuestion, Test, Question, TestTimerSetting, VariantForQuestion, PassedTest, AnswerToQuestion, TestSetting
 
 
 @admin.register(Test)
@@ -109,7 +109,7 @@ class AnswerToQuestionAdmin(admin.ModelAdmin):
     readonly_fields = ("created_at", "updated_at")
     fieldsets = (
         (None, {
-            "fields": ("passed_test", "question", "selected_variant", "open_answer")
+            "fields": ("passed_test", "question")
         }),
         ("Служебная", {
             "fields": ("created_at", "updated_at")
@@ -138,6 +138,46 @@ class QuestionPointSettingAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
             "fields": ("question", "setting", "point")
+        }),
+        ("Служебная", {
+            "fields": ("created_at", "updated_at")
+        })
+    )
+
+
+@admin.register(SelectedVariantAnswerToQuestion)
+class SelectedVariantAnswerToQuestionAdmin(admin.ModelAdmin):
+    list_display = ["id", "answer_question", "value"]
+    readonly_fields = ("created_at", "updated_at")
+    fieldsets = (
+        (None, {
+            "fields": ("answer_question", "value")
+        }),
+        ("Служебная", {
+            "fields": ("created_at", "updated_at")
+        })
+    )
+
+@admin.register(OpenAsnwerToQuestion)
+class OpenAsnwerToQuestionAdmin(admin.ModelAdmin):
+    list_display = ["id", "answer_question", "value"]
+    readonly_fields = ("created_at", "updated_at")
+    fieldsets = (
+        (None, {
+            "fields": ("answer_question", "value")
+        }),
+        ("Служебная", {
+            "fields": ("created_at", "updated_at")
+        })
+    )
+
+@admin.register(PointAnswerToQuestion)
+class PointAnswerToQuestionAdmin(admin.ModelAdmin):
+    list_display = ["id", "answer_question", "point"]
+    readonly_fields = ("created_at", "updated_at")
+    fieldsets = (
+        (None, {
+            "fields": ("answer_question", "value")
         }),
         ("Служебная", {
             "fields": ("created_at", "updated_at")
