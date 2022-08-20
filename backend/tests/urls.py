@@ -1,7 +1,7 @@
 from django.urls import include, path
 
 # from django.conf.urls import url
-from tests.views import TestViewSet
+from tests.views import CategoriesDetailApiView, TestViewSet, CategoryListApiView, CategoriesDetailTestsApiView
 from drf_spectacular.views import (
     SpectacularAPIView,
     SpectacularRedocView,
@@ -15,6 +15,10 @@ router.register(r"tests", TestViewSet, basename="test")
 
 urlpatterns = router.urls
 urlpatterns += [
+    path("categories/", CategoryListApiView.as_view()),
+    path("categories/<int:pk>/", CategoriesDetailApiView.as_view()),
+    path("categories/<int:pk>/tests/", CategoriesDetailTestsApiView.as_view()),
+
     path("schema/", SpectacularAPIView.as_view(), name="schema"),
     # Optional UI:
     path(

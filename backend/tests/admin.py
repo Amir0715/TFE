@@ -1,5 +1,5 @@
 from django.contrib import admin
-from tests.models import Category, OpenAsnwerToQuestion, PointAnswerToQuestion, QuestionPointSetting, QuestionSetting, SelectedVariantAnswerToQuestion, Test, Question, TestTimerSetting, VariantForQuestion, PassedTest, AnswerToQuestion, TestSetting
+from tests.models import Category, OpenAsnwerToQuestion, PointAnswerToQuestion, QuestionPointSetting, QuestionSetting, SelectedVariantAnswerToQuestion, Test, Question, TestAvailabilityTimeRangeSetting, TestTimerSetting, VariantForQuestion, PassedTest, AnswerToQuestion, TestSetting
 
 
 @admin.register(Test)
@@ -158,6 +158,7 @@ class SelectedVariantAnswerToQuestionAdmin(admin.ModelAdmin):
         })
     )
 
+
 @admin.register(OpenAsnwerToQuestion)
 class OpenAsnwerToQuestionAdmin(admin.ModelAdmin):
     list_display = ["id", "answer_question", "value"]
@@ -170,6 +171,7 @@ class OpenAsnwerToQuestionAdmin(admin.ModelAdmin):
             "fields": ("created_at", "updated_at")
         })
     )
+
 
 @admin.register(PointAnswerToQuestion)
 class PointAnswerToQuestionAdmin(admin.ModelAdmin):

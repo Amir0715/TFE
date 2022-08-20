@@ -30,3 +30,28 @@ class TestSerializer(serializers.ModelSerializer):
         model = Test
         fields = ["id", "title", "description",
                   "category", "question_count", "questions"]
+
+
+class TestShortInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Test
+        fields = ["id", "title", "description", "question_count"]
+
+
+class RecursiveSrializer(serializers.Serializer):
+    '''
+    Рекурсивная сериалазиация потомков
+    '''
+
+    def to_representation(self, value):
+        serializer = self.parent.parent.__class__(value, context=self.context)
+        return serializer.data
+
+
+class CategoriesWithTests(serializers.ModelSerializer):
+    children = RecursiveSrializer(many=True, required=False)
+    tests = TestShortInfoSerializer(many=True)
+
+    class Meta:
+        model = Category
+        fields = ["id", "title", "tests", "children"]
