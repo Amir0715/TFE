@@ -1,13 +1,24 @@
-from tabnanny import verbose
 from django.db import models
 from django.conf import settings
+import abc
 
 
 class BaseModel(models.Model):
-    created_at = models.DateTimeField(
-        verbose_name="Время создания", auto_now_add=True)
-    updated_at = models.DateTimeField(
-        verbose_name="Время обновления", auto_now=True)
+    created_at = models.DateTimeField(verbose_name="Время создания", auto_now_add=True)
+    updated_at = models.DateTimeField(verbose_name="Время обновления", auto_now=True)
+
+    class Meta:
+        abstract = True
+
+
+class AbstractModelMeta(abc.ABCMeta, type(BaseModel)):
+    pass
+
+
+class SettingBaseModel(BaseModel, metaclass=AbstractModelMeta):
+    @abc.abstractmethod
+    def to_dict(self):
+        pass
 
     class Meta:
         abstract = True
@@ -23,9 +34,7 @@ class Test(BaseModel):
         related_name="tests",
     )
     author = models.ForeignKey(
-        verbose_name="Автор",
-        to=settings.AUTH_USER_MODEL,
-        on_delete=models.RESTRICT
+        verbose_name="Автор", to=settings.AUTH_USER_MODEL, on_delete=models.RESTRICT
     )
 
     def __str__(self):
@@ -76,7 +85,7 @@ class Question(BaseModel):
         verbose_name="Тест",
         to="Test",
         on_delete=models.CASCADE,
-        related_name="questions"
+        related_name="questions",
     )
     type = models.IntegerField(choices=QuestionType.choices)
 
@@ -96,9 +105,7 @@ class QuestionSetting(BaseModel):
     name = models.CharField(verbose_name="Название настройки", max_length=255)
     # related_name не указан, так что используй conflicts_set
     conflicts = models.ManyToManyField(
-        verbose_name="Конфликтующие настройки",
-        to="self",
-        blank=True
+        verbose_name="Конфликтующие настройки", to="self", blank=True
     )
 
     def __str__(self) -> str:
@@ -109,22 +116,24 @@ class QuestionSetting(BaseModel):
         verbose_name_plural = "Настройки для вопросов"
 
 
-class QuestionPointSetting(BaseModel):
-    point = models.PositiveIntegerField(
-        verbose_name="Кол-во баллов за этот вопрос")
+class QuestionPointSetting(SettingBaseModel):
+    point = models.PositiveIntegerField(verbose_name="Кол-во баллов за этот вопрос")
     question = models.OneToOneField(
         verbose_name="Вопрос",
         to="Question",
         on_delete=models.CASCADE,
         related_name="point",
-        unique=True
+        unique=True,
     )
     setting = models.ForeignKey(
         verbose_name="Настройка",
         to="QuestionSetting",
         on_delete=models.CASCADE,
-        related_name="point_values"
+        related_name="point_values",
     )
+
+    def to_dict(self):
+        return {self.setting.name: self.point}
 
     class Meta:
         verbose_name = "Значение настройки Кол-во баллов"
@@ -136,11 +145,10 @@ class VariantForQuestion(BaseModel):
         verbose_name="Вопрос",
         to="Question",
         on_delete=models.CASCADE,
-        related_name="variant_answers"
+        related_name="variant_answers",
     )
     value = models.TextField(verbose_name="Вариант ответа")
-    is_correct = models.BooleanField(
-        verbose_name="Правильный ответ", default=False)
+    is_correct = models.BooleanField(verbose_name="Правильный ответ", default=False)
 
     def __str__(self):
         return self.value
@@ -156,13 +164,10 @@ class PassedTest(BaseModel):
         verbose_name="Прошедший",
         to=settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name="passed_tests"
+        related_name="passed_tests",
     )
     test = models.ForeignKey(
-        verbose_name="Тест",
-        to="Test",
-        on_delete=models.CASCADE,
-        related_name="passed"
+        verbose_name="Тест", to="Test", on_delete=models.CASCADE, related_name="passed"
     )
 
     def __str__(self):
@@ -178,13 +183,13 @@ class AnswerToQuestion(BaseModel):
         verbose_name="Вопрос",
         to="Question",
         on_delete=models.CASCADE,
-        related_name="answers"
+        related_name="answers",
     )
     passed_test = models.ForeignKey(
         verbose_name="Пренадлежит прохождению",
         to="PassedTest",
         on_delete=models.CASCADE,
-        related_name="answers"
+        related_name="answers",
     )
 
     class Meta:
@@ -197,7 +202,7 @@ class SelectedVariantAnswerToQuestion(BaseModel):
         verbose_name="Ответ пользователя",
         to="AnswerToQuestion",
         on_delete=models.CASCADE,
-        related_name="selected_variants"
+        related_name="selected_variants",
     )
     value = models.ForeignKey(
         verbose_name="Выбранный ответ",
@@ -205,7 +210,7 @@ class SelectedVariantAnswerToQuestion(BaseModel):
         on_delete=models.CASCADE,
         related_name="in_answers",
         null=True,
-        blank=True
+        blank=True,
     )
 
     class Meta:
@@ -218,12 +223,9 @@ class OpenAsnwerToQuestion(BaseModel):
         verbose_name="Ответ пользователя",
         to="AnswerToQuestion",
         on_delete=models.CASCADE,
-        related_name="open_answer"
+        related_name="open_answer",
     )
-    value = models.TextField(
-        verbose_name="Введенный ответ",
-        blank=True
-    )
+    value = models.TextField(verbose_name="Введенный ответ", blank=True)
 
     class Meta:
         verbose_name = "Ответ пользователя на открытый вопрос"
@@ -235,7 +237,7 @@ class PointAnswerToQuestion(BaseModel):
         verbose_name="Ответ пользователя",
         to="AnswerToQuestion",
         on_delete=models.CASCADE,
-        related_name="point"
+        related_name="point",
     )
     point = models.FloatField("Набранное кол-во баллов")
 
@@ -248,9 +250,7 @@ class TestSetting(BaseModel):
     name = models.CharField(verbose_name="Название настройки", max_length=255)
     # related_name не указан, так что используй conflicts_set
     conflicts = models.ManyToManyField(
-        verbose_name="Конфликтующие настройки",
-        to="self",
-        blank=True
+        verbose_name="Конфликтующие настройки", to="self", blank=True
     )
 
     def __str__(self) -> str:
@@ -261,19 +261,19 @@ class TestSetting(BaseModel):
         verbose_name_plural = "Настройки для тестов"
 
 
-class TestTimerSetting(BaseModel):
+class TestTimerSetting(SettingBaseModel):
     test = models.OneToOneField(
         verbose_name="Тест",
         to="Test",
         on_delete=models.CASCADE,
         related_name="timer",
-        unique=True
+        unique=True,
     )
     setting = models.ForeignKey(
         verbose_name="Настройка",
         to="TestSetting",
         on_delete=models.CASCADE,
-        related_name="timer_values"
+        related_name="timer_values",
     )
     timer_value = models.DurationField(verbose_name="Длительность")
 
@@ -281,20 +281,23 @@ class TestTimerSetting(BaseModel):
         verbose_name = "Значение настройки Таймера"
         verbose_name_plural = "Значения настройек Таймера"
 
+    def to_dict(self):
+        return {self.setting.name: self.timer_value}
 
-class TestAvailabilityTimeRangeSetting(BaseModel):
+
+class TestAvailabilityTimeRangeSetting(SettingBaseModel):
     test = models.OneToOneField(
         verbose_name="Тест",
         to="Test",
         on_delete=models.CASCADE,
         related_name="availability_time_range",
-        unique=True
+        unique=True,
     )
     setting = models.ForeignKey(
         verbose_name="Настройка",
         to="TestSetting",
         on_delete=models.CASCADE,
-        related_name="availability_time_range_values"
+        related_name="availability_time_range_values",
     )
     start_time = models.DateTimeField(verbose_name="Время начало доступа")
     end_time = models.DateTimeField(verbose_name="Время конца доступа")
@@ -302,3 +305,6 @@ class TestAvailabilityTimeRangeSetting(BaseModel):
     class Meta:
         verbose_name = "Значение настройки Доступность по времени"
         verbose_name_plural = "Значения настройки Доступность по времени"
+
+    def to_dict(self):
+        return {"start_time": self.start_time, "end_time": self.end_time}
