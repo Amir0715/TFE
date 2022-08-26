@@ -107,6 +107,7 @@ class QuestionSetting(BaseModel):
     conflicts = models.ManyToManyField(
         verbose_name="Конфликтующие настройки", to="self", blank=True
     )
+    required = models.BooleanField(verbose_name="Необходимая настройка")
 
     def __str__(self) -> str:
         return self.name
@@ -139,6 +140,29 @@ class QuestionPointSetting(SettingBaseModel):
         verbose_name = "Значение настройки Кол-во баллов"
         verbose_name_plural = "Значения настройки Кол-во баллов"
 
+class QuestionOrderNumberSetting(SettingBaseModel):
+    order_number = models.PositiveIntegerField(verbose_name="Порядковый номер вопроса")
+    question = models.OneToOneField(
+        verbose_name="Вопрос",
+        to="Question",
+        on_delete=models.CASCADE,
+        related_name="order_number",
+        unique=True,
+    )
+    setting = models.ForeignKey(
+        verbose_name="Настройка",
+        to="QuestionSetting",
+        on_delete=models.CASCADE,
+        related_name="order_number_values",
+    )
+
+    def to_dict(self):
+        return {self.setting.name: self.order_number}
+
+    class Meta:
+        verbose_name = "Значение настройки Порядковый номер"
+        verbose_name_plural = "Значения настройки Порядковый номер"
+
 
 class VariantForQuestion(BaseModel):
     question = models.ForeignKey(
@@ -167,8 +191,13 @@ class PassedTest(BaseModel):
         related_name="passed_tests",
     )
     test = models.ForeignKey(
-        verbose_name="Тест", to="Test", on_delete=models.CASCADE, related_name="passed"
+        verbose_name="Тест",
+        to="Test",
+        on_delete=models.CASCADE,
+        related_name="passed"
     )
+
+    completed_at = models.DateTimeField(verbose_name="Время завершения теста", null=True, blank=True)
 
     def __str__(self):
         return f"[{self.user} - {self.test.title}]"
