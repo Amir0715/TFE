@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "e5061b537a51fafd77f745f47d965d0b876457259e0c5c11b85555f29623320e"
+            "sha256": "fe62647fab70a8018fd711a9588ff66d674d134ce9cd7b4475da671cc51c016e"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -56,6 +56,13 @@
             "index": "pypi",
             "version": "==3.2.0"
         },
+        "django-modeladmin-reorder": {
+            "hashes": [
+                "sha256:bf42d0dcd184b796b4d6d988c4b4cea7914adfc4430dd9978a8a0199051f189f"
+            ],
+            "index": "pypi",
+            "version": "==0.3.1"
+        },
         "djangorestframework": {
             "hashes": [
                 "sha256:0c33407ce23acc68eca2a6e46424b008c9c02eceb8cf18581921d0092bc1f2ee",
@@ -82,11 +89,11 @@
         },
         "jsonschema": {
             "hashes": [
-                "sha256:3776512df4f53f74e6e28fe35717b5b223c1756875486984a31bc9165e7fc920",
-                "sha256:870a61bb45050b81103faf6a4be00a0a906e06636ffcf0b84f5a2e51faf901ff"
+                "sha256:15062f4cc6f591400cd528d2c355f2cfa6a57e44c820dc783aee5e23d36a831f",
+                "sha256:9892b8d630a82990521a9ca630d3446bd316b5ad54dbe981338802787f3e0d2d"
             ],
             "markers": "python_version >= '3.7'",
-            "version": "==4.13.0"
+            "version": "==4.14.0"
         },
         "pyrsistent": {
             "hashes": [
@@ -189,11 +196,11 @@
     "develop": {
         "astroid": {
             "hashes": [
-                "sha256:86b0a340a512c65abf4368b80252754cda17c02cdbbd3f587dddf98112233e7b",
-                "sha256:bb24615c77f4837c707669d16907331374ae8a964650a66999da3f5ca68dc946"
+                "sha256:39fa822c82dc112f5072a208ddf01c58184043aa90e3e469786fa0520c71aaa7",
+                "sha256:af71cdc0775b6e4d88076746620e2c8cd1bf4533a9977cfdd00eeea97d95530c"
             ],
-            "markers": "python_full_version >= '3.6.2'",
-            "version": "==2.11.7"
+            "markers": "python_full_version >= '3.7.2'",
+            "version": "==2.12.4"
         },
         "autopep8": {
             "hashes": [
@@ -339,11 +346,11 @@
         },
         "pylint": {
             "hashes": [
-                "sha256:487ce2192eee48211269a0e976421f334cf94de1806ca9d0a99449adcdf0285e",
-                "sha256:fabe30000de7d07636d2e82c9a518ad5ad7908590fe135ace169b44839c15f90"
+                "sha256:4b124affc198b7f7c9b5f9ab690d85db48282a025ef9333f51d2d7281b92a6c3",
+                "sha256:4f3f7e869646b0bd63b3dfb79f3c0f28fc3d2d923ea220d52620fd625aed92b0"
             ],
             "index": "pypi",
-            "version": "==2.14.5"
+            "version": "==2.15.0"
         },
         "pylint-django": {
             "hashes": [
@@ -361,14 +368,6 @@
             "markers": "python_full_version >= '3.6.2'",
             "version": "==0.7"
         },
-        "setuptools": {
-            "hashes": [
-                "sha256:10602cd0a6f5feab6656e9587f9075292ab777c5200f3bf00293ecd23d9f2788",
-                "sha256:d2e010624c781b26ad6629a8de9832327cf853dea93894487979e55f9ad06857"
-            ],
-            "markers": "python_version >= '3.7'",
-            "version": "==65.1.0"
-        },
         "toml": {
             "hashes": [
                 "sha256:806143ae5bfb6a3c6e736a764057db0e6a0e05e338b5630894a5f779cabb4f9b",
@@ -382,7 +381,7 @@
                 "sha256:939de3e7a6161af0c887ef91b7d41a53e7c5a1ca976325f429cb46ea9bc30ecc",
                 "sha256:de526c12914f0c550d15924c62d72abc48d6fe7364aa87328337a31007fe8a4f"
             ],
-            "markers": "python_full_version < '3.11.0a7'",
+            "markers": "python_version < '3.11'",
             "version": "==2.0.1"
         },
         "tomlkit": {
@@ -460,7 +459,7 @@
                 "sha256:ee6acae74a2b91865910eef5e7de37dc6895ad96fa23603d1d27ea69df545015",
                 "sha256:ef3f72c9666bba2bab70d2a8b79f2c6d2c1a42a7f7e2b0ec83bb2f9e383950af"
             ],
-            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4'",
+            "markers": "python_version < '3.11'",
             "version": "==1.14.1"
         }
     }

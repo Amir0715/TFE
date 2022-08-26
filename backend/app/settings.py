@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     "rest_framework",
     'drf_spectacular',
     'django_extensions',
+    'admin_reorder',
 ]
 
 MIDDLEWARE = [
@@ -43,7 +44,54 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    'admin_reorder.middleware.ModelAdminReorder',
 ]
+
+ADMIN_REORDER = (
+    # Keep original label and models
+    # 'sites',
+    'auth',
+    # Reorder app models
+    {
+        'app': 'tests',
+        'label': "Тесты",
+        'models': (
+            'tests.Test',
+            'tests.Question',
+            'tests.VariantForQuestion',
+            'tests.Category'
+        )
+    },
+    {
+        'app': 'tests',
+        'label': "Настройки тестов",
+        'models': (
+            'tests.TestSetting',
+            'tests.TestTimerSetting',
+            'tests.TestAvailabilityTimeRangeSetting'
+        )
+    },
+    {
+        'app': 'tests',
+        'label': "Настройки вопросов",
+        'models': (
+            'tests.QuestionSetting',
+            'tests.QuestionPointSetting',
+            'tests.QuestionOrderNumberSetting'
+        )
+    },
+    {
+        'app': 'tests',
+        'label': "Прохождения",
+        'models': (
+            'tests.PassedTest',
+            'tests.AnswerToQuestion',
+            'tests.SelectedVariantAnswerToQuestion',
+            'tests.OpenAsnwerToQuestion',
+            'tests.PointAnswerToQuestion',
+        )
+    }
+)
 
 ROOT_URLCONF = "app.urls"
 
