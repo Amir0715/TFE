@@ -10,6 +10,7 @@ python-dotenv = "*"
 djangorestframework = "*"
 drf-spectacular = "*"
 django-extensions = "*"
+django-modeladmin-reorder = "*"
 
 [dev-packages]
 autopep8 = "*"

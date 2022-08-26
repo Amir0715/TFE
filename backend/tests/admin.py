@@ -3,6 +3,7 @@ from tests.models import (
     Category,
     OpenAsnwerToQuestion,
     PointAnswerToQuestion,
+    QuestionOrderNumberSetting,
     QuestionPointSetting,
     QuestionSetting,
     SelectedVariantAnswerToQuestion,
@@ -116,6 +117,16 @@ class QuestionPointSettingAdmin(admin.ModelAdmin):
     readonly_fields = ("created_at", "updated_at")
     fieldsets = (
         (None, {"fields": ("question", "setting", "point")}),
+        ("Служебная", {"fields": ("created_at", "updated_at")}),
+    )
+
+
+@admin.register(QuestionOrderNumberSetting)
+class QuestionOrderNumberSettingAdmin(admin.ModelAdmin):
+    list_display = ["id", "question", "order_number"]
+    readonly_fields = ("created_at", "updated_at")
+    fieldsets = (
+        (None, {"fields": ("question", "setting", "order_number")}),
         ("Служебная", {"fields": ("created_at", "updated_at")}),
     )
 
