@@ -1,12 +1,36 @@
 ﻿namespace TFE.Domain.Abstractions
 {
-    public abstract class Entity
+    public abstract class Entity : IEquatable<Entity>
     {
-        protected Entity() { }
-        protected Entity(Guid id) => Id = id;
+        protected Entity()
+        {
+            CreatedOnUtc = DateTime.UtcNow;
+            UpdatedOnUtc = DateTime.UtcNow;
+        }
+        protected Entity(Guid id) : this() => Id = id;
 
         public Guid Id { get; protected set; }
-        public DateTime CreateDateTime { get; protected set; } = DateTime.Now;
-        public DateTime UpdateDateTime { get; protected set; } = DateTime.Now;
+        public DateTime CreatedOnUtc { get; protected set; }
+        public DateTime UpdatedOnUtc { get; protected set; }
+
+        public bool Equals(Entity? other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return Id.Equals(other.Id);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((Entity)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();
+        }
     }
 }
