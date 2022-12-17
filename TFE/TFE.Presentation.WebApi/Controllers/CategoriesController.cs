@@ -1,8 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using TFE.Application.CQRS.Categories.Commands;
 using TFE.Application.CQRS.Categories.Commands.CreateCategory;
-using TFE.Application.CQRS.Categories.Queries;
 using TFE.Application.CQRS.Categories.Queries.GetAllCategory;
 using TFE.Application.CQRS.Categories.Queries.GetCategory;
 using TFE.Domain.Entities;

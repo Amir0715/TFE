@@ -1,5 +1,4 @@
 ﻿using TFE.Domain.Abstractions;
-using TFE.Domain.Entities;
 
 namespace TFE.Persistence.Exceptions.NotFoundExceptions;
 
