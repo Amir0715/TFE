@@ -8,7 +8,7 @@ public class Test : Entity
 
     public string Title { get; private set; }
     public string Description { get; private set; }
-    public Guid CategoryId { get; private set; }
+    public int CategoryId { get; private set; }
     public Category Category { get; private set; }
     public IEnumerable<Question> Questions => _questions;
     

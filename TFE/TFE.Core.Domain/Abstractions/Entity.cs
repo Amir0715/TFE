@@ -7,9 +7,9 @@
             CreatedOnUtc = DateTime.UtcNow;
             UpdatedOnUtc = DateTime.UtcNow;
         }
-        protected Entity(Guid id) : this() => Id = id;
+        protected Entity(int id) : this() => Id = id;
 
-        public Guid Id { get; protected set; }
+        public int Id { get; protected set; }
         public DateTime CreatedOnUtc { get; protected set; }
         public DateTime UpdatedOnUtc { get; protected set; }
 

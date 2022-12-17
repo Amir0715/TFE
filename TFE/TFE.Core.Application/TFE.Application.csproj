@@ -8,9 +8,8 @@
 
   <ItemGroup>
     <Folder Include="CQRS\Abstractions\Messaging\" />
-    <Folder Include="CQRS\Test\Commands\CreateTest\" />
     <Folder Include="Behaviors\" />
-    <Folder Include="CQRS\Test\Queries\GetAllTest\" />
+    <Folder Include="CQRS\Categories\Queries\GetAllCategory\" />
     <Folder Include="Mapster\" />
   </ItemGroup>
 

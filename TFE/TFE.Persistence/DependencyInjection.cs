@@ -8,7 +8,7 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddApplicationDbContext(this IServiceCollection services, IConfiguration configuration)
     {
-        var connectionString = configuration.GetConnectionString("ConnectionString");
+        var connectionString = configuration.GetConnectionString("DbConnection");
 
         services.AddDbContext<ApplicationDbContext>(option =>
         {
