@@ -22,13 +22,13 @@ public class JwtBearerOptionsSetup : IConfigureOptions<JwtBearerOptions>
         options.RequireHttpsMetadata = false;
         options.TokenValidationParameters = new TokenValidationParameters
         {
-            ValidateIssuer = false,
+            ValidateIssuer = true,
             ValidIssuer = _jwtOptions.Issuer,
-            ValidateLifetime = false,
-            ValidateAudience = false,
+            ValidateLifetime = true,
+            ValidateAudience = true,
             ValidAudience = _jwtOptions.Audience,
-            ValidateIssuerSigningKey = false,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_jwtOptions.SecretKey)),
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.SecretKey)),
         };
     }
 }

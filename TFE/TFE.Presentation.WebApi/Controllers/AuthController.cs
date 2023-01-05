@@ -66,8 +66,8 @@ public class AuthController : ControllerBase
 
     [HttpGet]
     [Authorize]
-    public async Task<IEnumerable<Claim>> CurrentUser()
+    public async Task<string?> CurrentUser()
     {
-        return HttpContext.User.Claims;
+        return HttpContext.User.Identity.Name;
     }
 }

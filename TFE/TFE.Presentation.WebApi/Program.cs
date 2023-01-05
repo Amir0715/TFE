@@ -54,26 +54,29 @@ builder.Services
         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
         options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
         options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-    }).AddJwtBearer();
+    })
+    //.AddJwtBearer();
+    .AddJwtBearer(options =>
+    {
+        JwtOptions jwtOptions = new JwtOptions();
+        builder.Configuration.GetRequiredSection("Jwt").Bind(jwtOptions);
 
-builder.Services.AddAuthorization();
-// .AddJwtBearer(options =>
-// {
-//     JwtOptions jwtOptions = new JwtOptions();
-//     builder.Configuration.GetRequiredSection("Jwt").Bind(jwtOptions);
-//     options.SaveToken = true;
-//     options.RequireHttpsMetadata = false;
-//     options.TokenValidationParameters = new TokenValidationParameters
-//     {
-//         ValidateIssuer = true,
-//         ValidIssuer = jwtOptions.Issuer,
-//         ValidateLifetime = true,
-//         ValidateAudience = true,
-//         ValidAudience = jwtOptions.Audience,
-//         ValidateIssuerSigningKey = true,
-//         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.SecretKey)),
-//     };
-// });
+        options.SaveToken = true;
+        options.RequireHttpsMetadata = false;
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidIssuer = jwtOptions.Issuer,
+            ValidateLifetime = true,
+            ValidateAudience = true,
+            ValidAudience = jwtOptions.Audience,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.SecretKey)),
+        };
+    });
+
+// builder.Services.AddAuthorization();
+
 
 builder.Services.AddCors(options =>
 {
@@ -114,7 +117,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseCors("CorsPolicy");
-app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();

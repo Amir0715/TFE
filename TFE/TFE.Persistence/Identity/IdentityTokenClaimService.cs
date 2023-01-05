@@ -23,6 +23,7 @@ public class IdentityTokenClaimService : ITokenClaimsService
     {
         var user = await _userManager.FindByNameAsync(userName);
         var roles = await _userManager.GetRolesAsync(user);
+        
         var claims = new List<Claim>
         {
             new (JwtRegisteredClaimNames.Name, userName), 
@@ -30,17 +31,20 @@ public class IdentityTokenClaimService : ITokenClaimsService
             new (JwtRegisteredClaimNames.Email, user.Email),
             new (JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
-        
         claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
-        var key = Encoding.ASCII.GetBytes(_jwtOptions.SecretKey);
+
+        // var key = Encoding.UTF8.GetBytes(_jwtOptions.SecretKey);
+        var key = "9C9482B98D985AF5DB915CE4573A8"u8.ToArray();
         var signinCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha512Signature);
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(claims),
             Expires = DateTime.UtcNow.AddDays(7),
-            Issuer = _jwtOptions.Issuer,
+            //Issuer = _jwtOptions.Issuer,
+            Issuer = "TFE",
             IssuedAt = DateTime.UtcNow,
-            Audience = _jwtOptions.Audience,
+            //Audience = _jwtOptions.Audience,
+            Audience = "TFE",
             SigningCredentials = signinCredentials,
         };
 
