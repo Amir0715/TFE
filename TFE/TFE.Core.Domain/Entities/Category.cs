@@ -4,21 +4,23 @@ namespace TFE.Domain.Entities;
 
 public class Category : Entity
 {
-    private ICollection<Category> _childCategories;
-    private ICollection<Test> _tests;
+    private readonly HashSet<Category> _childCategories;
+    private readonly HashSet<Test> _tests;
 
     public string Name { get; private set; }
     public string Description { get; private set; }
     public int? ParentCategoryId { get; private set; }
     public Category? ParentCategory { get; private set; }
-    public IEnumerable<Category> ChildCategories => _childCategories;
-    public IEnumerable<Test> Tests => _tests;
+    public IReadOnlyCollection<Category> ChildCategories => _childCategories;
+    public IReadOnlyCollection<Test> Tests => _tests;
 
     private Category()
     {
+        _childCategories = new HashSet<Category>();
+        _tests = new HashSet<Test>();
     }
 
-    public Category(string name, string description, Category? parentCategory = null)
+    public Category(string name, string description, Category? parentCategory = null) : this()
     {
         if (string.IsNullOrEmpty(name)) throw new ArgumentException("Value cannot be null or empty.", nameof(name));
         if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(name));

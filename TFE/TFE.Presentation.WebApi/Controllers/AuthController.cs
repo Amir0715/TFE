@@ -63,11 +63,4 @@ public class AuthController : ControllerBase
     {
         await _signInManager.SignOutAsync();
     }
-
-    [HttpGet]
-    [Authorize]
-    public async Task<string?> CurrentUser()
-    {
-        return HttpContext.User.Identity.Name;
-    }
 }

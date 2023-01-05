@@ -4,23 +4,24 @@ namespace TFE.Domain.Entities;
 
 public class Test : Entity
 {
-    private ICollection<Question> _questions;
+    private HashSet<Question> _questions;
 
     public string Title { get; private set; }
     public string Description { get; private set; }
     public int CategoryId { get; private set; }
     public Category Category { get; private set; }
 
-    public IEnumerable<Question> Questions => _questions;
+    public IReadOnlyCollection<Question> Questions => _questions;
 
-    public int AuthorId { get; private set; }
-    public User Author { get; private set; }
+    //public int AuthorId { get; private set; }
+    //public User Author { get; private set; }
 
     private Test()
     {
+        _questions = new HashSet<Question>();
     }
 
-    public Test(string title, string description, Category category) : base()
+    public Test(string title, string description, Category category) : this()
     {
         if (category == null) throw new ArgumentNullException(nameof(category));
         // if (author == null) throw new ArgumentNullException(nameof(author));
@@ -36,11 +37,11 @@ public class Test : Entity
         CategoryId = category.Id;
     }
 
-    public Question AddQuestion(Question question)
+    public Question AddQuestion(string title, string body, QuestionType type)
     {
-        if (question == null) throw new ArgumentNullException(nameof(question));
-
+        var question = new Question(title, body, type);
         _questions.Add(question);
+
         return question;
     }
 }

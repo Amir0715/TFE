@@ -10,13 +10,13 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+
+// Настриваем сваггер
 builder.Services.AddSwaggerGen(options =>
 {
+    // Настраиваем jwt авторизацию для сваггера
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "Auth",
@@ -24,7 +24,7 @@ builder.Services.AddSwaggerGen(options =>
         Scheme = "bearer",
         BearerFormat = "JWT",
         In = ParameterLocation.Header,
-        Description = "Insert token"
+        Description = "Введите токен"
     });
     options.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
@@ -42,20 +42,22 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 builder.Services.ConfigureOptions<JwtOptionsSetup>();
-builder.Services.ConfigureOptions<JwtBearerOptionsSetup>();
+
+//builder.Services.ConfigureOptions<JwtBearerOptionsSetup>();
 
 builder.Services.AddApplication();
 builder.Services.AddApplicationDbContext(builder.Configuration);
 builder.Services.AddIdentity();
 
+// настриваем аунтефикацию
 builder.Services
     .AddAuthentication(options =>
     {
+        // схема аунтефикации - 
         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
         options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
         options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
     })
-    //.AddJwtBearer();
     .AddJwtBearer(options =>
     {
         JwtOptions jwtOptions = new JwtOptions();
@@ -74,8 +76,6 @@ builder.Services
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.SecretKey)),
         };
     });
-
-// builder.Services.AddAuthorization();
 
 
 builder.Services.AddCors(options =>

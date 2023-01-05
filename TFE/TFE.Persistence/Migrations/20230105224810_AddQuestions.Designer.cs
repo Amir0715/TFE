@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TFE.Infrastructure;
@@ -11,9 +12,11 @@ using TFE.Infrastructure;
 namespace TFE.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230105224810_AddQuestions")]
+    partial class AddQuestions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -237,6 +240,9 @@ namespace TFE.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("AuthorId")
+                        .HasColumnType("integer");
+
                     b.Property<int>("CategoryId")
                         .HasColumnType("integer");
 
@@ -258,11 +264,47 @@ namespace TFE.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AuthorId");
+
                     b.HasIndex("CategoryId");
 
                     b.HasIndex("Id");
 
                     b.ToTable("Tests");
+                });
+
+            modelBuilder.Entity("TFE.Domain.Entities.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("BirthDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("CreatedOnUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("UpdatedOnUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("TFE.Infrastructure.Identity.ApplicationUser", b =>
@@ -405,11 +447,19 @@ namespace TFE.Infrastructure.Migrations
 
             modelBuilder.Entity("TFE.Domain.Entities.Test", b =>
                 {
+                    b.HasOne("TFE.Domain.Entities.User", "Author")
+                        .WithMany()
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("TFE.Domain.Entities.Category", "Category")
                         .WithMany("Tests")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Author");
 
                     b.Navigation("Category");
                 });

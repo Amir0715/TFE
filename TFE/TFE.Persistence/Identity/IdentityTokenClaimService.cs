@@ -33,18 +33,15 @@ public class IdentityTokenClaimService : ITokenClaimsService
         };
         claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
 
-        // var key = Encoding.UTF8.GetBytes(_jwtOptions.SecretKey);
-        var key = "9C9482B98D985AF5DB915CE4573A8"u8.ToArray();
+        var key = Encoding.UTF8.GetBytes(_jwtOptions.SecretKey);
         var signinCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha512Signature);
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(claims),
             Expires = DateTime.UtcNow.AddDays(7),
-            //Issuer = _jwtOptions.Issuer,
-            Issuer = "TFE",
+            Issuer = _jwtOptions.Issuer,
             IssuedAt = DateTime.UtcNow,
-            //Audience = _jwtOptions.Audience,
-            Audience = "TFE",
+            Audience = _jwtOptions.Audience,
             SigningCredentials = signinCredentials,
         };
 

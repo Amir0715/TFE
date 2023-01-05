@@ -10,6 +10,7 @@
     <Folder Include="CQRS\Abstractions\Messaging\" />
     <Folder Include="Behaviors\" />
     <Folder Include="CQRS\Categories\Queries\GetAllCategory\" />
+    <Folder Include="CQRS\Tests\Commands\AddQuestion\" />
     <Folder Include="Mapster\" />
   </ItemGroup>
 
