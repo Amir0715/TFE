@@ -2,8 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using TFE.Application.CQRS.Abstractions.Messaging;
 using TFE.Domain.Entities;
-using TFE.Persistence;
-using TFE.Persistence.Exceptions.NotFoundExceptions;
+using TFE.Infrastructure;
+using TFE.Infrastructure.Exceptions.NotFoundExceptions;
 
 namespace TFE.Application.CQRS.Tests.Commands.CreateTest;
 

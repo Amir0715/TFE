@@ -25,7 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TFE.Core.Domain\TFE.Domain.csproj" />
-    <ProjectReference Include="..\TFE.Persistence\TFE.Persistence.csproj" />
+    <ProjectReference Include="..\TFE.Persistence\TFE.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

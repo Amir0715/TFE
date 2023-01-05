@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TFE.Application.CQRS.Tests.Commands.CreateTest;
 using TFE.Application.CQRS.Tests.Queries.GetAllTest;
@@ -8,6 +9,7 @@ using TFE.WebApi.DTOs;
 
 namespace TFE.WebApi.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]/[action]")]
 public class TestsController : ControllerBase

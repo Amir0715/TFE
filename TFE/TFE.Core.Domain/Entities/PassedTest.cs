@@ -7,7 +7,10 @@ namespace TFE.Domain.Entities;
 /// </summary>
 public class PassedTest : Entity
 {
-    // TODO: Добавить пользователя
+    public int TestId { get; private set; }
     public Test Test { get; private set; }
     public DateTime CompletedDateTime { get; private set; }
+
+    public int PassedUserId { get; private set; }
+    public User PassedUser { get; private set; }
 }

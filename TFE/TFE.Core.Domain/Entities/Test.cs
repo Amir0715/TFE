@@ -10,9 +10,12 @@ public class Test : Entity
     public string Description { get; private set; }
     public int CategoryId { get; private set; }
     public Category Category { get; private set; }
+
     public IEnumerable<Question> Questions => _questions;
-    
-    // TODO: Добавить пользователя как автора
+
+    public int AuthorId { get; private set; }
+    public User Author { get; private set; }
+
     private Test()
     {
     }
@@ -20,6 +23,8 @@ public class Test : Entity
     public Test(string title, string description, Category category) : base()
     {
         if (category == null) throw new ArgumentNullException(nameof(category));
+        // if (author == null) throw new ArgumentNullException(nameof(author));
+
         if (string.IsNullOrEmpty(title)) throw new ArgumentException("Value cannot be null or empty.", nameof(title));
         if (string.IsNullOrEmpty(description)) throw new ArgumentException("Value cannot be null or empty.", nameof(description));
         if (string.IsNullOrWhiteSpace(title)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(title));
@@ -27,6 +32,7 @@ public class Test : Entity
 
         Title = title;
         Description = description;
+        // AuthorId = author.Id;
         CategoryId = category.Id;
     }
 

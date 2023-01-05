@@ -1,5 +1,5 @@
 ﻿using MapsterMapper;
-using TFE.Persistence;
+using TFE.Infrastructure;
 
 namespace TFE.Application.CQRS;
 

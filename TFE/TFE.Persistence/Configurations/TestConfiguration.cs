@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TFE.Domain.Entities;
 
-namespace TFE.Persistence.Configurations;
+namespace TFE.Infrastructure.Configurations;
 
 public class TestConfiguration : IEntityTypeConfiguration<Test>
 {

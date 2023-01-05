@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TFE.Application.CQRS.Categories.Commands.CreateCategory;
 using TFE.Application.CQRS.Categories.Queries.GetAllCategory;
@@ -10,6 +11,7 @@ namespace TFE.WebApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]/[action]")]
+[Authorize]
 public class CategoriesController : ControllerBase
 {
     private readonly ISender _sender;

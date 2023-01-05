@@ -1,6 +1,6 @@
 ﻿using TFE.Domain.Abstractions;
 
-namespace TFE.Persistence.Exceptions.NotFoundExceptions;
+namespace TFE.Infrastructure.Exceptions.NotFoundExceptions;
 
 public class NotFoundException<T> : Exception
     where T : Entity

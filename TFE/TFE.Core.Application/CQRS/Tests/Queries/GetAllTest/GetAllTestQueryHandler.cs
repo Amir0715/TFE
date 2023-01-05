@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using TFE.Application.CQRS.Abstractions.Messaging;
 using TFE.Domain.Entities;
-using TFE.Persistence;
+using TFE.Infrastructure;
 
 namespace TFE.Application.CQRS.Tests.Queries.GetAllTest;
 
