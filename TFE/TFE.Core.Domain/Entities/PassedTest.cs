@@ -12,5 +12,5 @@ public class PassedTest : Entity
     public DateTime CompletedDateTime { get; private set; }
 
     public int PassedUserId { get; private set; }
-    public User PassedUser { get; private set; }
+    public UserProfile PassedUser { get; private set; }
 }

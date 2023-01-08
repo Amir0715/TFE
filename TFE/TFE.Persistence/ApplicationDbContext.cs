@@ -12,6 +12,8 @@ namespace TFE.Infrastructure
         public DbSet<Test> Tests => Set<Test>();
         public DbSet<Category> Categories => Set<Category>();
         public DbSet<Question> Questions => Set<Question>();
+        public DbSet<UserProfile> UserProfiles => Set<UserProfile>();
+
         public ApplicationDbContext(DbContextOptions options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder builder)

@@ -1,7 +1,9 @@
-﻿using System.Security.Claims;
+﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using TFE.Application.CQRS.UserProfiles.Commands.UserProfileCreate;
 using TFE.Domain.Interfaces;
 using TFE.Infrastructure.Identity;
 using TFE.WebApi.DTOs;
@@ -16,12 +18,15 @@ public class AuthController : ControllerBase
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly ITokenClaimsService _tokenClaimsService;
-
-    public AuthController(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, ITokenClaimsService tokenClaimsService)
+    private readonly ISender _sender;
+    
+    public AuthController(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, ITokenClaimsService tokenClaimsService, ISender sender)
     {
         _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
         _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
         _tokenClaimsService = tokenClaimsService ?? throw new ArgumentNullException(nameof(tokenClaimsService));
+        _sender = sender ?? throw new ArgumentNullException(nameof(sender));
+
     }
 
     [HttpPost]
@@ -62,5 +67,30 @@ public class AuthController : ControllerBase
     public async Task LogOut()
     {
         await _signInManager.SignOutAsync();
+    }
+
+    [HttpPost]
+    public async Task<ActionResult> Registration(RegistrationDTO registrationDTO, CancellationToken cancellationToken)
+    {
+        var applicationUser = new ApplicationUser
+        {
+            Email = registrationDTO.Email,
+            UserName = registrationDTO.UserName
+        };
+
+        var creationIdentityResult = await _userManager.CreateAsync(applicationUser, registrationDTO.Password);
+        if (!creationIdentityResult.Succeeded) 
+            return BadRequest(creationIdentityResult.Errors);
+        
+        var createdUser = await _userManager.FindByEmailAsync(applicationUser.Email);
+        var createUserProfileCommand = new UserProfileCreateCommand(
+            registrationDTO.FirstName,
+            registrationDTO.LastName, 
+            registrationDTO.Patronymic
+        );
+        var userProfileId = await _sender.Send(createUserProfileCommand, cancellationToken);
+        createdUser.UserProfileId = userProfileId;
+        await _userManager.UpdateAsync(createdUser);
+        return Ok();
     }
 }

@@ -1,0 +1,17 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using TFE.Domain.Entities;
+
+namespace TFE.Infrastructure.Configurations;
+
+public class UserProfileConfiguration : IEntityTypeConfiguration<UserProfile>
+{
+    public void Configure(EntityTypeBuilder<UserProfile> builder)
+    {
+        builder.HasKey(x => x.Id);
+
+        builder.Property(x => x.FirstName).HasMaxLength(48).IsRequired();
+        builder.Property(x => x.LastName).HasMaxLength(48).IsRequired();
+        builder.Property(x => x.Patronymic).HasMaxLength(48);
+    }
+}
