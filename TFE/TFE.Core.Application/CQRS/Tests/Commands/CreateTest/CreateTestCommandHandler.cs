@@ -18,7 +18,10 @@ public class CreateTestCommandHandler : BaseHandler, ICommandHandler<CreateTestC
         var category = await DbContext.Categories.FirstOrDefaultAsync(x => x.Id == request.CategoryId, cancellationToken);
         if (category == null) throw new NotFoundException<Category>(request.CategoryId);
 
-        var test = new Test(request.Title, request.Description, category);
+        var userProfile = await DbContext.UserProfiles.FirstOrDefaultAsync(x => x.Id == request.UserProfileId, cancellationToken);
+        if (userProfile == null) throw new NotFoundException<UserProfile>(request.UserProfileId);
+
+        var test = new Test(request.Title, request.Description, category, userProfile);
         await DbContext.Tests.AddAsync(test, cancellationToken);
         await DbContext.SaveChangesAsync(cancellationToken);
 

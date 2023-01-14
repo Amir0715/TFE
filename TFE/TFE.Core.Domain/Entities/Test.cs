@@ -13,19 +13,16 @@ public class Test : Entity
 
     public IReadOnlyCollection<Question> Questions => _questions;
 
-    //public int AuthorId { get; private set; }
-    //public User Author { get; private set; }
+    public int? AuthorProfileId { get; private set; }
+    public UserProfile? AuthorProfile { get; private set; }
 
     private Test()
     {
         _questions = new HashSet<Question>();
     }
 
-    public Test(string title, string description, Category category) : this()
+    public Test(string title, string description, Category category, UserProfile authorProfile) : this()
     {
-        if (category == null) throw new ArgumentNullException(nameof(category));
-        // if (author == null) throw new ArgumentNullException(nameof(author));
-
         if (string.IsNullOrEmpty(title)) throw new ArgumentException("Value cannot be null or empty.", nameof(title));
         if (string.IsNullOrEmpty(description)) throw new ArgumentException("Value cannot be null or empty.", nameof(description));
         if (string.IsNullOrWhiteSpace(title)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(title));
@@ -33,7 +30,11 @@ public class Test : Entity
 
         Title = title;
         Description = description;
-        // AuthorId = author.Id;
+
+        AuthorProfile = authorProfile ?? throw new ArgumentNullException(nameof(authorProfile));
+        AuthorProfileId = authorProfile.Id;
+
+        Category = category ?? throw new ArgumentNullException(nameof(category));
         CategoryId = category.Id;
     }
 

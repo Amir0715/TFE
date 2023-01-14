@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using TFE.Application.CQRS.UserProfiles.Commands.UserProfileCreate;
 using TFE.Domain.Interfaces;
 using TFE.Infrastructure.Identity;
@@ -26,7 +25,6 @@ public class AuthController : ControllerBase
         _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
         _tokenClaimsService = tokenClaimsService ?? throw new ArgumentNullException(nameof(tokenClaimsService));
         _sender = sender ?? throw new ArgumentNullException(nameof(sender));
-
     }
 
     [HttpPost]
