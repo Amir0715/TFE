@@ -1,0 +1,27 @@
+version: '3.4'
+
+services:
+  tfe.webapi:
+    container_name: TFE.WebApi
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ConnectionStrings__DbConnection=Host=postgres;Port=5432;Database=TFE;Username=postgres;Password=postgrespw
+    ports:
+      - 5000:80
+      - 5001:443
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+  postgres:
+    container_name: TFE.Postgresql
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=postgrespw
+      - POSTGRES_DB=TFE
+    volumes:
+      - db:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+volumes:
+  db:

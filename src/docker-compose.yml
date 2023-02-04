@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  tfe.webapi:
+    image: ${DOCKER_REGISTRY-}tfewebapi
+    build:
+      context: .
+      dockerfile: TFE.Presentation.WebApi/Dockerfile
